@@ -29,22 +29,9 @@ public class LLMService {
                 .build();
         this.mcpToolProvider = mcpToolProvider;
     }
-    /*public String question(String userMessage){
-        return chatClient.prompt()
-                .system("You are a helpful assistant. Answer briefly and clearly.")
-                .user(userMessage)
-                .toolCallbacks(mcpToolProvider)
-                .call().content();
-
-    }*/
     public String question(String userMessage){
         String content = chatClient.prompt()
-                /*.system("""
-                You are a helpful assistant.
-                If the user asks about weather, city climate:
-                - ALWAYS call the tool `weather`
-                """)*/
-                .user(userMessage)//.toolCallbacks(mcpToolProvider)
+                .user(userMessage)
                 .call()
                 .content();
 
