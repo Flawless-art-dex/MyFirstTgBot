@@ -39,9 +39,7 @@ public class MyBot implements SpringLongPollingBot, LongPollingSingleThreadUpdat
 
     @Override
     public void consume(Update update) {
-        // We check if the update has a message and the message has text
         if (update.hasMessage() && update.getMessage().hasText()) {
-            // Set variables
             String message_text = update.getMessage().getText();
             long chat_id = update.getMessage().getChatId();
             long user_id = update.getMessage().getFrom().getId();
@@ -52,7 +50,7 @@ public class MyBot implements SpringLongPollingBot, LongPollingSingleThreadUpdat
                         .text("⛔ У вас нет доступа")
                         .build();
                 try {
-                    telegramClient.execute(errMessage); // Sending our message object to user
+                    telegramClient.execute(errMessage);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
@@ -61,17 +59,17 @@ public class MyBot implements SpringLongPollingBot, LongPollingSingleThreadUpdat
             else {
                 String answer;
                 try{
-                    answer = llmService.question(message_text);}
+                    answer = llmService.question(String.valueOf(chat_id),message_text);}
                 catch (Exception e){
                     answer = "⚠️ Ошибка при обработке запроса";
                 }
-                SendMessage message = SendMessage // Create a message object
+                SendMessage message = SendMessage
                         .builder()
                         .chatId(chat_id)
                         .text(answer)
                         .build();
                 try {
-                    telegramClient.execute(message); // Sending our message object to user
+                    telegramClient.execute(message);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
